@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<mapper namespace="org.mall.data.mapper.DataMapper">
+	
+	
+		<insert id="insertOne">     
+			INSERT INTO tbl_data (category, name, title, content, resource, imgUrl, date, month)
+			VALUES (#{category}, #{name}, #{title}, #{content}, #{resource}, #{imgUrl}, #{date}, #{month})
+		</insert>
+
+
+
+		<select id='selectOne' resultType="org.mall.data.vo.DataVo">
+			SELECT * FROM tbl_data WHERE dno = #{dno}
+		</select>
+
+
+		<select id="selectList" resultType="org.mall.data.vo.DataVo">
+			SELECT * FROM tbl_data ORDER BY dno DESC LIMIT #{skip}, #{amount}	
+		</select>
+		
+		<select id="selectTotalCount" resultType="int">     
+			SELECT count(*) FROM tbl_data
+		</select>
+		
+		
+		<update id="updateOne">
+
+		</update>	
+	
+	
+			
+		<delete id="deleteOne">
+			DELETE FROM tbl_data WHERE dno = #{dno}
+		</delete>	
+		
+		
+		
+	</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+	<mapper namespace="org.mall.admin.mapper.ReplyMapper">  
+	
+
+		<insert id="insertOne">    
+			INSERT INTO tbl_reply (pno, reply, replyer)
+			VALUES (#{pno}, #{reply}, #{replyer})
+		</insert>
+		
+	
+		<select id='selectOne' resultType="org.mall.admin.board.ReplyVO">
+			SELECT * FROM tbl_reply WHERE rno = #{rno}
+		</select>
+		
+
+		<select id='getListWithPaging' resultType="org.mall.admin.board.ReplyVO">
+			SELECT rno, pno, reply, replyer, replyDate, updateDate
+			FROM tbl_reply 
+			WHERE pno = #{pno}
+			ORDER BY rno ASC
+			limit #{cri.start}, #{cri.amount}    <!-- this data is referred from (Criteria.java)  -->
+		</select>
+		
+
+		<select id='getCountByPno' resultType="int">
+			<![CDATA[
+			SELECT count(rno)
+			FROM tbl_reply 
+			WHERE pno = #{pno}
+			]]>
+		</select>
+		
+
+		<update id="updateOne">
+			UPDATE tbl_reply SET reply = #{reply}, 
+						         updateDate = now()		                     	       
+			WHERE rno = #{rno}
+		</update>	
+		
+
+		<delete id="deleteOne">
+			DELETE FROM tbl_reply WHERE rno = #{rno}
+		</delete>	
+	
+	</mapper>

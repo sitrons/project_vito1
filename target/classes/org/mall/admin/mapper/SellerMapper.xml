@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	
+	<mapper namespace="org.mall.admin.mapper.SellerMapper">  
+	
+		<insert id="insertOne">
+			INSERT INTO tbl_seller(sellerNo, name, description, category) 
+			VALUES (#{sellerNo}, #{name}, #{description}, #{category})
+		</insert>
+		
+	
+		<select id="selectTotalCount" resultType="int">     
+			SELECT count(sellerNo) FROM tbl_seller
+		</select>
+		
+		<select id="selectOne" resultType="org.mall.admin.board.SellerVO">
+			SELECT * FROM tbl_seller WHERE sellerNo = #{sellerNo}
+		</select>
+		
+		<select id="selectList" resultType="org.mall.admin.board.SellerVO">
+			SELECT * FROM tbl_seller
+		</select>
+		
+	
+		<update id="updateOne">
+			UPDATE tbl_seller SET name = #{name},
+			                      description = #{description},
+			                      category = #{category}
+	        WHERE sellerNo = #{sellerNo}
+		</update>
+		
+		
+		<delete id="deleteOne" parameterType="int">
+			DELETE FROM tbl_seller WHERE sellerNo = #{sellerNo}
+		</delete>
+		
+	</mapper>

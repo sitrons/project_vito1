@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+	<mapper namespace="org.mall.admin.mapper.ProductMapper">
+	
+	
+		<insert id="insertOne">     
+			INSERT INTO tbl_product (productName, unitPrice, description, stockAmount, fileNum, sellerNo, userid, category)
+			VALUES (#{productName}, #{unitPrice}, #{description}, #{stockAmount}, #{fileNum}, #{sellerNo}, #{userid}, #{category})
+		</insert>
+	
+		
+		<insert id="insertSelectKey"> 
+			<selectKey keyProperty='pno' order='AFTER' resultType='int'>
+			SELECT last_insert_id() 
+			</selectKey>
+			INSERT INTO tbl_product (productName, unitPrice, description, stockAmount, amountSold, fileNum, sellerNo, userid, category)
+			VALUES (#{productName}, #{unitPrice}, #{description}, #{stockAmount}, #{amountSold}, #{fileNum}, #{sellerNo}, #{userid}, #{category})
+		</insert>
+		
+
+	
+		<select id="selectTotalCount" resultType="int">
+			SELECT count(*) FROM tbl_product 
+			<include refid="criteria"></include> 
+		</select>
+	
+		
+		
+		<sql id="criteria">
+			<where>
+				<if test="type != null">
+				<foreach item='type' collection='typeArr' separator="OR"> 
+					<choose>
+						<when test="type == 'P'.toString()">
+						productName like concat('%', #{keyword}, '%')
+						</when>
+						<when test="type == 'D'.toString()">
+						description like concat('%', #{keyword}, '%')
+						</when>
+						<when test="type == 'S'.toString()">
+						sellerNo like concat('%', #{keyword}, '%')
+						</when>
+					</choose>
+				</foreach>	
+				</if>	
+       		</where>
+		</sql>
+		
+		
+		
+		
+		<select id="getListWithPaging" resultType="org.mall.admin.board.ProductVO">
+		<![CDATA[
+		    SELECT * FROM tbl_product
+		]]>
+
+		<include refid="criteria"></include> 
+			
+		<![CDATA[
+		ORDER BY pno DESC LIMIT #{skip}, #{amount};			
+		]]>	
+		</select>
+		
+		
+		
+		<select id='selectOne' resultType="org.mall.admin.board.ProductVO">
+			SELECT * FROM tbl_product WHERE pno = #{pno}
+		</select>
+
+
+		<select id="selectList" resultType="org.mall.admin.board.ProductVO">
+			SELECT * FROM tbl_product ORDER BY pno LIMIT #{skip}, #{amount}	
+		</select>
+		
+		
+		<update id="insertFileNum">   
+			UPDATE tbl_product SET fileNum = (#{fileNum})
+			WHERE pno = #{pno}
+		</update>
+		
+		
+		<update id="updateOne">
+			UPDATE tbl_product SET productName = #{productName},
+			                       unitPrice = #{unitPrice},
+			                       description = #{description},
+			                       stockAmount = #{stockAmount},			             
+			                       updateDate = now()                 
+			WHERE pno = #{pno}
+		</update>	
+	
+	
+		<update id="updateReplyCnt">
+			UPDATE tbl_product SET replyCnt = replyCnt + #{amount}
+			WHERE pno = #{pno}
+		</update>
+		
+			
+		<delete id="deleteOne">
+			DELETE FROM tbl_product WHERE pno = #{pno}
+		</delete>	
+		
+		
+		
+	</mapper>
